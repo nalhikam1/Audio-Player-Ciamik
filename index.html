@@ -641,7 +641,6 @@
       { year: 2021, title: "Pemberkatan Negeri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/7-Pemberkatan-Negeri.mp3" },
       { year: 2021, title: "Pemurnian dari Kuasa Kegelapan", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/8-Pemurnian-dari-Kuasa-Kegelapan.mp3" },
       { year: 2021, title: "Penyelarasan Diri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/9-Meditasi-penyelarasan-diri.mp3" },
-      { year: 2021, title: "Penyelarasan Tubuh", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/10-Penyelarasan-Tubuh.mp3" },
       { year: 2021, title: "Penjernihan Jiwa Raga", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/11-Penjernihan-Jiwa-Raga.mp3" },
       { year: 2021, title: "Pemurnian Tubuh Energi dari Makhluk Alam Bawah", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/12-Pemurnian-Tubuh-Energi-dari-Makhluk-Alam-Bawah.mp3" },
       { year: 2021, title: "Pemurnian Tubuh Emosi dari Luka Batin dan Trauma", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/13-Pemurnian-Tubuh-Emosi-dari-Luka-Batin-dan-Trauma.mp3" },
@@ -754,11 +753,11 @@
       filteredTracks.forEach((track, i) => {
         const globalIndex = audioData.indexOf(track);
         if (track.year !== lastYear) {
+          if (lastYear !== null) {
+            html += '</ul></div>';
+          }
           const count = filteredTracks.filter(t => t.year === track.year).length;
           html += '<div class="year-group"><h2 class="year-heading">' + track.year + ' <span class="track-count">(' + count + ' audio)</span></h2><ul class="track-list">';
-          if (lastYear !== null) {
-            html = html.replace(/<\/ul><\/div>(?=[^]*$)/, '') + '</ul></div>';
-          }
           lastYear = track.year;
           numInGroup = 0;
         }
@@ -772,7 +771,9 @@
         html += '<div class="track-year-badge">' + track.year + '</div></div></li>';
       });
 
-      html += '</ul></div>';
+      if (lastYear !== null) {
+        html += '</ul></div>';
+      }
       playlistEl.innerHTML = html;
 
       playlistEl.querySelectorAll('.track-item').forEach(el => {
@@ -795,7 +796,7 @@
       currentIndex = index;
       const track = audioData[index];
       audio.src = track.url;
-      audio.play().catch(() => {});
+      audio.play().catch(e => console.warn('Playback failed:', e.message));
       isPlaying = true;
       updatePlayerUI();
       playerBar.classList.add('visible');
@@ -820,7 +821,7 @@
     }
 
     function resumeAudio() {
-      audio.play().catch(() => {});
+      audio.play().catch(e => console.warn('Playback failed:', e.message));
       isPlaying = true;
       updatePlayerUI();
     }
