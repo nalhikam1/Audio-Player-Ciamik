@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio Meditasi — Persaudaraan Matahari</title>
+  <meta name="description" content="Dengarkan koleksi audio meditasi dari Persaudaraan Matahari. 102 audio dari tahun 2020–2026.">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎧</text></svg>">
+  <style>
+    /* ========== RESET & BASE ========== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-card: #1e293b;
+      --bg-hover: #334155;
+      --bg-active: #3b4f6b;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent: #f59e0b;
+      --accent-hover: #fbbf24;
+      --accent-glow: rgba(245, 158, 11, 0.25);
+      --border: #334155;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 4px 24px rgba(0,0,0,0.3);
+      --transition: 0.2s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========== LAYOUT ========== */
+    .app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding-bottom: 140px;
+    }
+
+    /* ========== HEADER ========== */
+    .header {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 20px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent), #d97706);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .logo-text h1 {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text-primary);
+    }
+
+    .logo-text p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    /* ========== SEARCH ========== */
+    .search-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px 24px 0;
+    }
+
+    .search-box {
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-size: 15px;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    .search-box input::placeholder { color: var(--text-muted); }
+    .search-box input:focus { border-color: var(--accent); }
+
+    .search-box svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* ========== YEAR TABS ========== */
+    .year-tabs {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px 24px 0;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .year-tabs::-webkit-scrollbar { display: none; }
+
+    .year-tab {
+      padding: 8px 18px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+
+    .year-tab:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+    .year-tab.active {
+      background: var(--accent);
+      color: #0f172a;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ========== PLAYLIST ========== */
+    .playlist {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      width: 100%;
+    }
+
+    .year-group { margin-bottom: 8px; }
+
+    .year-heading {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 12px 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .year-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .track-count {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .track-list { list-style: none; }
+
+    .track-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background var(--transition);
+      position: relative;
+    }
+
+    .track-item:hover { background: var(--bg-hover); }
+
+    .track-item.active {
+      background: var(--bg-active);
+    }
+
+    .track-item.active .track-number { color: var(--accent); }
+
+    .track-item.playing .track-play-indicator {
+      display: flex;
+    }
+
+    .track-item.playing .track-number-text {
+      display: none;
+    }
+
+    .track-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .track-play-indicator {
+      display: none;
+      align-items: flex-end;
+      gap: 2px;
+      height: 16px;
+    }
+
+    .track-play-indicator span {
+      width: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+      animation: eq 0.8s ease-in-out infinite alternate;
+    }
+
+    .track-play-indicator span:nth-child(1) { height: 8px; animation-delay: 0s; }
+    .track-play-indicator span:nth-child(2) { height: 14px; animation-delay: 0.2s; }
+    .track-play-indicator span:nth-child(3) { height: 6px; animation-delay: 0.4s; }
+
+    @keyframes eq {
+      0% { transform: scaleY(0.3); }
+      100% { transform: scaleY(1); }
+    }
+
+    .track-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .track-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-item.active .track-title { color: var(--accent); }
+
+    .track-year-badge {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ========== NO RESULTS ========== */
+    .no-results {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-muted);
+    }
+
+    .no-results svg { margin-bottom: 12px; opacity: 0.5; }
+    .no-results p { font-size: 15px; }
+
+    /* ========== PLAYER BAR ========== */
+    .player-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, #0f172a 0%, rgba(30, 41, 59, 0.98) 100%);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      z-index: 200;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .player-bar.visible { transform: translateY(0); }
+
+    .player-progress-bar {
+      position: absolute;
+      top: -3px;
+      left: 0;
+      right: 0;
+      height: 6px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .player-progress-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--border);
+    }
+
+    .player-progress-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 0 3px 3px 0;
+      transition: width 0.1s linear;
+    }
+
+    .player-progress-bar:hover .player-progress-fill { height: 6px; }
+
+    .player-progress-bar:hover::before { height: 6px; }
+
+    .player-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 12px 24px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .player-track-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .player-track-title {
+      font-size: 15px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-primary);
+    }
+
+    .player-track-time {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .player-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+
+    .player-btn:hover { color: var(--text-primary); background: var(--bg-hover); }
+
+    .player-btn.play-btn {
+      width: 48px;
+      height: 48px;
+      background: var(--accent);
+      color: #0f172a;
+    }
+
+    .player-btn.play-btn:hover { background: var(--accent-hover); }
+
+    .player-btn svg { width: 20px; height: 20px; }
+    .player-btn.play-btn svg { width: 22px; height: 22px; }
+
+    .volume-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .volume-slider {
+      width: 80px;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: var(--border);
+      border-radius: 2px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      background: var(--accent);
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .volume-slider::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background: var(--accent);
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 640px) {
+      .header { padding: 16px; }
+      .search-wrap, .year-tabs, .playlist { padding-left: 16px; padding-right: 16px; }
+
+      .player-inner { padding: 10px 16px 14px; gap: 12px; }
+
+      .volume-wrap { display: none; }
+
+      .logo-text h1 { font-size: 16px; }
+
+      .player-btn { width: 36px; height: 36px; }
+      .player-btn.play-btn { width: 44px; height: 44px; }
+
+      .track-item { padding: 10px 10px; gap: 10px; }
+      .track-title { font-size: 14px; }
+    }
+
+    @media (max-width: 380px) {
+      .player-track-title { font-size: 13px; }
+      .player-btn.prev-btn, .player-btn.next-btn { width: 32px; height: 32px; }
+      .player-btn.prev-btn svg, .player-btn.next-btn svg { width: 16px; height: 16px; }
+    }
+
+    /* ========== SCROLLBAR ========== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* ========== LOADING SHIMMER ========== */
+    .track-item.loading-shimmer .track-title {
+      background: linear-gradient(90deg, var(--bg-hover) 25%, var(--bg-active) 50%, var(--bg-hover) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      color: transparent;
+      border-radius: 4px;
+      user-select: none;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo">
+          <div class="logo-icon">☀️</div>
+          <div class="logo-text">
+            <h1>Audio Meditasi</h1>
+            <p>Persaudaraan Matahari</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="searchInput" placeholder="Cari audio meditasi..." autocomplete="off">
+      </div>
+    </div>
+
+    <!-- Year Tabs -->
+    <div class="year-tabs" id="yearTabs"></div>
+
+    <!-- Playlist -->
+    <div class="playlist" id="playlist"></div>
+  </div>
+
+  <!-- Player Bar -->
+  <div class="player-bar" id="playerBar">
+    <div class="player-progress-bar" id="progressBar">
+      <div class="player-progress-fill" id="progressFill"></div>
+    </div>
+    <div class="player-inner">
+      <div class="player-track-info">
+        <div class="player-track-title" id="playerTitle">—</div>
+        <div class="player-track-time">
+          <span id="currentTime">0:00</span> / <span id="totalTime">0:00</span>
+        </div>
+      </div>
+      <div class="player-controls">
+        <div class="volume-wrap">
+          <button class="player-btn volume-btn" id="volumeBtn" aria-label="Volume">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+          </button>
+          <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.8" aria-label="Volume">
+        </div>
+        <button class="player-btn prev-btn" id="prevBtn" aria-label="Sebelumnya">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+        </button>
+        <button class="player-btn play-btn" id="playBtn" aria-label="Putar">
+          <svg id="iconPlay" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="iconPause" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+        </button>
+        <button class="player-btn next-btn" id="nextBtn" aria-label="Selanjutnya">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Element -->
+  <audio id="audioEl" preload="metadata"></audio>
+
+  <script>
+    /* ========== AUDIO DATA ========== */
+    const audioData = [
+      { year: 2026, title: "Meditasi Penerang Jiwa", url: "https://persaudaraanmatahari.org/wp-content/uploads/2026/02/Meditasi-Penerang-Jiwa.mp3" },
+      { year: 2026, title: "Meditasi Penyelarasan Tubuh", url: "https://persaudaraanmatahari.org/wp-content/uploads/2026/02/Meditasi-Penyelarasan-Tubuh.mp3" },
+      { year: 2025, title: "Meditasi Tahun Baru", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/01/Meditasi-Tahun-Baru.mp3" },
+      { year: 2025, title: "Meditasi Kesehatan", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/01/Meditasi-Kesehatan.mp3" },
+      { year: 2025, title: "Hening Cipta feat. Indonesia Pusaka", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/03/Hening-Cipta-feat-Indonesia-Pusaka.mp3" },
+      { year: 2025, title: "Meditasi Penataan Syaraf", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/04/MEDITASI-PENATAAN-SYARAF.mp3" },
+      { year: 2025, title: "Meditasi Peningkatan Kinerja Otak", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/04/Meditasi-Peningkatan-Kinerja-Otak.mp3" },
+      { year: 2025, title: "Meditasi Taunus", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/07/Audio-Meditasi-Taunus-Fix.mp3" },
+      { year: 2025, title: "Meditasi Kebangkitan Kesadaran", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/08/Meditasi-Kebangkitan-Kesadaran.mp3" },
+      { year: 2025, title: "Meditasi Energi Splendor", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/09/Meditasi-Energi-Splendor.mp3" },
+      { year: 2025, title: "Meditasi Penyembuhan Inner Child", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/09/Meditasi-Penyembuhan-Inner-Child.mp3" },
+      { year: 2025, title: "Meditasi Barcelona", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/11/Meditasi-Barcelona.mp3" },
+      { year: 2025, title: "Meditasi Takhta Suci", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/11/Meditasi-Takhta-Suci.mp3" },
+      { year: 2025, title: "Meditasi Penjernihan Diri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2025/12/Meditasi-Penjernihan-Diri.mp3" },
+      { year: 2024, title: "Meditasi Pemurnian Diri dan Pemberkatan Negeri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/01/Meditasi-Pemurnian-Diri-dan-Pemberkatan-Negeri.mp3" },
+      { year: 2024, title: "Meditasi Kebahagiaan Sejati", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/01/Meditasi-Kebahagiaan-Sejati.mp3" },
+      { year: 2024, title: "Meditasi Pemurnian Jiwa 2024", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/02/Meditasi-Pemurnian-Jiwa-2024.mp3" },
+      { year: 2024, title: "Meditasi Pemberkatan Negeri dan Bumi", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/03/Meditasi-Pemberkatan-Negeri-dan-Bumi.mp3" },
+      { year: 2024, title: "Meditasi Cahaya Kesadaran Murni", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/05/Meditasi-Cahaya-Kesadaran-Murni.mp3" },
+      { year: 2024, title: "Meditasi Keberserahan Diri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/05/Meditasi-Keberserahan-Diri.mp3" },
+      { year: 2024, title: "Meditasi Api Suci Ilahi", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/05/Meditasi-Api-Suci-Ilahi.mp3" },
+      { year: 2024, title: "Meditasi Pencerahan Jiwa", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/05/Meditasi-Pencerahan-Jiwa.mp3" },
+      { year: 2024, title: "Meditasi Hidup Surgawi", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/05/Meditasi-Hidup-Surgawi.mp3" },
+      { year: 2024, title: "Meditasi Buddha Tanpa Kepala", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/05/Meditasi-Buddha-Tanpa-Kepala.mp3" },
+      { year: 2024, title: "Meditasi Kemenangan Sejati", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/05/Meditasi-Kemenangan-Sejati.mp3" },
+      { year: 2024, title: "Meditasi Keajaiban", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/06/Meditasi-Keajaiban.mp4" },
+      { year: 2024, title: "Meditasi Golden Energi", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/06/MEDITASI-GOLDEN-ENERGI.mp3" },
+      { year: 2024, title: "Meditasi Pencipta Keajaiban", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/10/Meditasi-Pembukaan-Avalon-Batch-8-dari-Hanoi-Vietnam.mp3" },
+      { year: 2024, title: "Meditasi Cahaya dari Timur", url: "https://persaudaraanmatahari.org/wp-content/uploads/2024/10/Meditasi-Cahaya-dari-Timur.mp3" },
+      { year: 2023, title: "Meditasi Hati Suci", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/01/Persaudaraan%20Matahari%20-%20Meditasi%20Hati%20Suci.mp3" },
+      { year: 2023, title: "Meditasi Penyelarasan Bumi", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/04/Audio-SHD-Meditasi-Penyelarasan-Bumi.mp3" },
+      { year: 2023, title: "Meditasi Kebangkitan Jiwa Agung", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Kebangkitan-Jiwa-Agung.mp3" },
+      { year: 2023, title: "Meditasi Revolusi Suci", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Revolusi-Suci.mp3" },
+      { year: 2023, title: "Meditasi Kejujuran Diri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Kejujuran-Diri.mp3" },
+      { year: 2023, title: "Meditasi Pengampunan Diri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Pengampunan-Diri.mp3" },
+      { year: 2023, title: "Meditasi Ra", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-RA.mp3" },
+      { year: 2023, title: "Meditasi Druid", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Druid.mp3" },
+      { year: 2023, title: "Meditasi Tao", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Tao.mp3" },
+      { year: 2023, title: "Meditasi Golden Energy", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Golden-Energy.mp3" },
+      { year: 2023, title: "Meditasi Energi Peleburan Murni", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Energi-Peleburan-Murni-1.mp3" },
+      { year: 2023, title: "Meditasi Diamond Energy", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Diamond-Energy.mp3" },
+      { year: 2023, title: "Meditasi Ahura Mazda", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Ahura-Mazda.mp3" },
+      { year: 2023, title: "Meditasi Kejayaan Ilahi", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Kejayaan-Ilahi-1.mp3" },
+      { year: 2023, title: "Meditasi Emerald Energy", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Emerald-Energy.mp3" },
+      { year: 2023, title: "Meditasi Kebahagiaan Murni", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Kebahagiaan-Murni.mp3" },
+      { year: 2023, title: "Meditasi Bumi Surgawi", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/05/Meditasi-Bumi-Surgawi-1.mp3" },
+      { year: 2023, title: "Meditasi Penyelarasan Diri dan Negeri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/06/Meditasi-Penyelarasan-Diri-dan-Negeri.mp3" },
+      { year: 2023, title: "Meditasi Mencipta Keajaiban", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/06/Meditasi-Mencipta-Keajaiban-1.mp3" },
+      { year: 2023, title: "Meditasi Pemberkatan Indonesia", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/07/MEDITASI-PEMBERKATAN-INDONESIA.mp3" },
+      { year: 2023, title: "Meditasi Kebangkitan Nusantara", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/07/Meditasi_Kebangkitan_Nusantara.mp3" },
+      { year: 2023, title: "Panduan Hening Cipta", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/07/Panduan-Hening-Cipta.mp3" },
+      { year: 2023, title: "Meditasi Api Suci", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/09/Meditasi-Api-Suci_2023.mp3" },
+      { year: 2023, title: "Meditasi Penyembuhan Luka Bathin", url: "https://persaudaraanmatahari.org/wp-content/uploads/2023/10/Meditasi-Penyembuhan-Luka-Bathin.mp3" },
+      { year: 2022, title: "Meditasi Druid I", url: "https://persaudaraanmatahari.org/wp-content/uploads/2022/02/Meditasi-Druid-I.mp3" },
+      { year: 2022, title: "Meditasi Druid II", url: "https://persaudaraanmatahari.org/wp-content/uploads/2022/02/Meditasi-Druid-II.mp3" },
+      { year: 2022, title: "Meditasi Penjernihan Golden Energy", url: "https://persaudaraanmatahari.org/wp-content/uploads/2022/02/Meditasi-Penjernihan-Golden-Energy.mp3" },
+      { year: 2022, title: "Meditasi Penyelarasan dan Penyembuhan Golden Energy", url: "https://persaudaraanmatahari.org/wp-content/uploads/2022/02/Meditasi-Penyelarasan-dan-Penyembuhan-Golden-Energy.mp3" },
+      { year: 2022, title: "Meditasi Penyelarasan 5 Sisi Gelap", url: "https://persaudaraanmatahari.org/wp-content/uploads/2022/03/Meditasi-Penyelarasan-5-Sisi-Gelap-1.mp3" },
+      { year: 2022, title: "Meditasi Penyelarasan Kundalini", url: "https://persaudaraanmatahari.org/wp-content/uploads/2022/06/Meditasi-Penyelarasan-Kundalini.mp3" },
+      { year: 2022, title: "Meditasi Sinar Suci dan Api Suci", url: "https://persaudaraanmatahari.org/wp-content/uploads/2022/11/SHD-Meditasi-Sinar-Suci-dan-Api-Suci.mp3" },
+      { year: 2022, title: "Meditasi Pemurnian Jiwa", url: "https://persaudaraanmatahari.org/wp-content/uploads/2022/11/SHD-Meditasi-Pemurnian-Jiwa.mp3" },
+      { year: 2022, title: "Meditasi Pemurnian Jiwa 2", url: "https://persaudaraanmatahari.org/wp-content/uploads/2022/11/SHD-Meditasi-Pemurnian-Jiwa-2.mp3" },
+      { year: 2021, title: "Membangkitkan Jiwa Kesatria (Retreat Dieng)", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/1-Membangkitkan-Jiwa-Kesatria-Retreat-Dieng.mp3" },
+      { year: 2021, title: "Selaras dengan Semesta", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/2-Selaras-dengan-Semesta.mp3" },
+      { year: 2021, title: "Doa Pemurnian Jiwa", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/21-Doa-Pemurnian-Jiwa.mp3" },
+      { year: 2021, title: "Doa Ketulusan", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/4-Doa-Ketulusan.mp3" },
+      { year: 2021, title: "Penyelarasan Tubuh", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/10-Penyelarasan-Tubuh.mp3" },
+      { year: 2021, title: "Penyelarasan Bumi dan Jagat Raya", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/6-Penyelarasan-Bumi-dan-Jagat-Raya.mp3" },
+      { year: 2021, title: "Pemberkatan Negeri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/7-Pemberkatan-Negeri.mp3" },
+      { year: 2021, title: "Pemurnian dari Kuasa Kegelapan", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/8-Pemurnian-dari-Kuasa-Kegelapan.mp3" },
+      { year: 2021, title: "Penyelarasan Diri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/9-Meditasi-penyelarasan-diri.mp3" },
+      { year: 2021, title: "Penyelarasan Tubuh", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/10-Penyelarasan-Tubuh.mp3" },
+      { year: 2021, title: "Penjernihan Jiwa Raga", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/11-Penjernihan-Jiwa-Raga.mp3" },
+      { year: 2021, title: "Pemurnian Tubuh Energi dari Makhluk Alam Bawah", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/12-Pemurnian-Tubuh-Energi-dari-Makhluk-Alam-Bawah.mp3" },
+      { year: 2021, title: "Pemurnian Tubuh Emosi dari Luka Batin dan Trauma", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/13-Pemurnian-Tubuh-Emosi-dari-Luka-Batin-dan-Trauma.mp3" },
+      { year: 2021, title: "Upgrading Diri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/14%20Upgrading%20Diri.mp3" },
+      { year: 2021, title: "Pencerahan Paripurna", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/15-Pencerahan-Paripurna.mp3" },
+      { year: 2021, title: "Purifikasi dan Penyembuhan dari Sakit", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/16-Purifikasi-dan-Penyembuhan-dari-Sakit.mp3" },
+      { year: 2020, title: "Pemurnian Jiwa Raga", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/01-Pemurnian-Jiwa-Raga.mp3" },
+      { year: 2020, title: "Pemberkatan Bumi (Pemancaran Energi Ilahi Ohm)", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/02-Pemberkatan-Bumi-Pemancaran-Energi-Ilahi-Ohm.mp3" },
+      { year: 2020, title: "Kebijaksanaan Tertinggi", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/03-Kebijaksanaan-Tertinggi.mp3" },
+      { year: 2020, title: "Penjernihan Jiwa (Penyembuhan Luka Batin)", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/04-Penjernihan-Jiwa-Penyembuhan-Luka-Batin.mp3" },
+      { year: 2020, title: "Imunitas – Penyembuhan", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/05-Imunitas-_-Penyembuhan.mp3" },
+      { year: 2020, title: "Jiwa Ilahi", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/06-Jiwa-Ilahi.mp3" },
+      { year: 2020, title: "Pemurnian Jiwa Kolektif", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/07-Pemurnian-Jiwa-Kolektif.mp3" },
+      { year: 2020, title: "Hamemayu Hayuning Bawana", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/08-Hamemayu-Hayuning-Bawana.mp3" },
+      { year: 2020, title: "Kejumbuhan Dengan Gusti", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/09-Kejumbuhan-dgn-Gusti.mp3" },
+      { year: 2020, title: "Penyelarasan Diri & Jagad Raya", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/10-Penyelarasan-Diri-_-Jagad-Raya.mp3" },
+      { year: 2020, title: "Kesatuan Agung 1", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/11-Kesatuan-Agung-1.mp3" },
+      { year: 2020, title: "Kesatuan Agung 2", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/12-Kesatuan-Agung-2.mp3" },
+      { year: 2020, title: "Jumbuh Kawula Gusti", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/13-Jumbuh-Kawula-Gusti.mp3" },
+      { year: 2020, title: "Kesatuan Agung 3", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/14-Kesatuan-Agung-3.mp3" },
+      { year: 2020, title: "Mandala Agung Mahameru", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/15-Mandala-Agung-Mahameru.mp3" },
+      { year: 2020, title: "Bangkitlah Ksatria Cahaya", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/16-Bangkitlah-Ksatria-Cahaya.mp3" },
+      { year: 2020, title: "Kasih Murni", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/17-Kasih-Murni.mp3" },
+      { year: 2020, title: "Penyelarasan Sisi Gelap Diri", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/18-Penyelarasan-Sisi-Gelap-Diri.mp3" },
+      { year: 2020, title: "Tubuh Kosmik", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/19-Tubuh-Kosmik.mp3" },
+      { year: 2020, title: "Pemberkatan Negeri & Bumi", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/20-Pemberkatan-Negeri-_-Bumi.mp3" },
+      { year: 2020, title: "Doa Pemurnian Jiwa", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/21-Doa-Pemurnian-Jiwa.mp3" },
+      { year: 2020, title: "Merkaba", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/21-Merkaba.mp3" },
+      { year: 2020, title: "Aktivasi Merkaba Tubuh", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/22-Aktivasi-Merkaba-Tubuh.mp3" },
+      { year: 2020, title: "Penerimaan – Pemaafan (Accept – Forgive)", url: "https://persaudaraanmatahari.org/wp-content/uploads/2021/08/23-Penerimaan-Pemaafan-Accept-_-Forgive.mp3" }
+    ];
+
+    /* ========== STATE ========== */
+    let currentIndex = -1;
+    let isPlaying = false;
+    let activeYear = 'all';
+    let filteredTracks = [...audioData];
+
+    /* ========== DOM ========== */
+    const $ = (s) => document.querySelector(s);
+    const audio = $('#audioEl');
+    const playerBar = $('#playerBar');
+    const playBtn = $('#playBtn');
+    const prevBtn = $('#prevBtn');
+    const nextBtn = $('#nextBtn');
+    const iconPlay = $('#iconPlay');
+    const iconPause = $('#iconPause');
+    const playerTitle = $('#playerTitle');
+    const currentTimeEl = $('#currentTime');
+    const totalTimeEl = $('#totalTime');
+    const progressBar = $('#progressBar');
+    const progressFill = $('#progressFill');
+    const volumeSlider = $('#volumeSlider');
+    const volumeBtn = $('#volumeBtn');
+    const searchInput = $('#searchInput');
+    const yearTabsEl = $('#yearTabs');
+    const playlistEl = $('#playlist');
+
+    /* ========== HELPERS ========== */
+    function formatTime(s) {
+      if (!s || isNaN(s)) return '0:00';
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    function getYears() {
+      return [...new Set(audioData.map(t => t.year))].sort((a, b) => b - a);
+    }
+
+    /* ========== RENDER ========== */
+    function renderYearTabs() {
+      const years = getYears();
+      let html = '<button class="year-tab active" data-year="all">Semua</button>';
+      years.forEach(y => {
+        html += '<button class="year-tab" data-year="' + y + '">' + y + '</button>';
+      });
+      yearTabsEl.innerHTML = html;
+
+      yearTabsEl.querySelectorAll('.year-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeYear = btn.dataset.year;
+          yearTabsEl.querySelectorAll('.year-tab').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          filterAndRender();
+        });
+      });
+    }
+
+    function filterAndRender() {
+      const query = searchInput.value.toLowerCase().trim();
+      filteredTracks = audioData.filter(t => {
+        const matchYear = activeYear === 'all' || t.year === parseInt(activeYear);
+        const matchSearch = !query || t.title.toLowerCase().includes(query);
+        return matchYear && matchSearch;
+      });
+      renderPlaylist();
+    }
+
+    function renderPlaylist() {
+      if (filteredTracks.length === 0) {
+        playlistEl.innerHTML = '<div class="no-results"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><p>Tidak ada audio yang ditemukan</p></div>';
+        return;
+      }
+
+      let html = '';
+      let lastYear = null;
+      let numInGroup = 0;
+
+      filteredTracks.forEach((track, i) => {
+        const globalIndex = audioData.indexOf(track);
+        if (track.year !== lastYear) {
+          const count = filteredTracks.filter(t => t.year === track.year).length;
+          html += '<div class="year-group"><h2 class="year-heading">' + track.year + ' <span class="track-count">(' + count + ' audio)</span></h2><ul class="track-list">';
+          if (lastYear !== null) {
+            html = html.replace(/<\/ul><\/div>(?=[^]*$)/, '') + '</ul></div>';
+          }
+          lastYear = track.year;
+          numInGroup = 0;
+        }
+        numInGroup++;
+        const isActive = globalIndex === currentIndex;
+        const isCurrentlyPlaying = isActive && isPlaying;
+        html += '<li class="track-item' + (isActive ? ' active' : '') + (isCurrentlyPlaying ? ' playing' : '') + '" data-index="' + globalIndex + '">';
+        html += '<div class="track-number"><span class="track-number-text">' + numInGroup + '</span>';
+        html += '<div class="track-play-indicator"><span></span><span></span><span></span></div></div>';
+        html += '<div class="track-info"><div class="track-title">' + track.title + '</div>';
+        html += '<div class="track-year-badge">' + track.year + '</div></div></li>';
+      });
+
+      html += '</ul></div>';
+      playlistEl.innerHTML = html;
+
+      playlistEl.querySelectorAll('.track-item').forEach(el => {
+        el.addEventListener('click', () => {
+          const idx = parseInt(el.dataset.index);
+          if (idx === currentIndex && isPlaying) {
+            pauseAudio();
+          } else if (idx === currentIndex && !isPlaying) {
+            resumeAudio();
+          } else {
+            playTrack(idx);
+          }
+        });
+      });
+    }
+
+    /* ========== PLAYBACK ========== */
+    function playTrack(index) {
+      if (index < 0 || index >= audioData.length) return;
+      currentIndex = index;
+      const track = audioData[index];
+      audio.src = track.url;
+      audio.play().catch(() => {});
+      isPlaying = true;
+      updatePlayerUI();
+      playerBar.classList.add('visible');
+
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: track.title,
+          artist: 'Persaudaraan Matahari',
+          album: 'Audio Meditasi ' + track.year
+        });
+        navigator.mediaSession.setActionHandler('play', resumeAudio);
+        navigator.mediaSession.setActionHandler('pause', pauseAudio);
+        navigator.mediaSession.setActionHandler('previoustrack', playPrev);
+        navigator.mediaSession.setActionHandler('nexttrack', playNext);
+      }
+    }
+
+    function pauseAudio() {
+      audio.pause();
+      isPlaying = false;
+      updatePlayerUI();
+    }
+
+    function resumeAudio() {
+      audio.play().catch(() => {});
+      isPlaying = true;
+      updatePlayerUI();
+    }
+
+    function togglePlay() {
+      if (currentIndex === -1) {
+        playTrack(0);
+        return;
+      }
+      isPlaying ? pauseAudio() : resumeAudio();
+    }
+
+    function playNext() {
+      if (currentIndex < audioData.length - 1) {
+        playTrack(currentIndex + 1);
+      }
+    }
+
+    function playPrev() {
+      if (audio.currentTime > 3) {
+        audio.currentTime = 0;
+      } else if (currentIndex > 0) {
+        playTrack(currentIndex - 1);
+      }
+    }
+
+    function updatePlayerUI() {
+      const track = audioData[currentIndex];
+      if (!track) return;
+      playerTitle.textContent = track.title;
+      iconPlay.style.display = isPlaying ? 'none' : 'block';
+      iconPause.style.display = isPlaying ? 'block' : 'none';
+      renderPlaylist();
+    }
+
+    /* ========== AUDIO EVENTS ========== */
+    audio.addEventListener('timeupdate', () => {
+      if (!audio.duration) return;
+      const pct = (audio.currentTime / audio.duration) * 100;
+      progressFill.style.width = pct + '%';
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+      totalTimeEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('ended', () => {
+      playNext();
+    });
+
+    /* ========== PROGRESS BAR ========== */
+    function seekFromEvent(e) {
+      const rect = progressBar.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      if (audio.duration) {
+        audio.currentTime = pct * audio.duration;
+      }
+    }
+
+    let isSeeking = false;
+    progressBar.addEventListener('mousedown', (e) => { isSeeking = true; seekFromEvent(e); });
+    progressBar.addEventListener('touchstart', (e) => { isSeeking = true; seekFromEvent(e.touches[0]); }, { passive: true });
+    document.addEventListener('mousemove', (e) => { if (isSeeking) seekFromEvent(e); });
+    document.addEventListener('touchmove', (e) => { if (isSeeking) seekFromEvent(e.touches[0]); }, { passive: true });
+    document.addEventListener('mouseup', () => { isSeeking = false; });
+    document.addEventListener('touchend', () => { isSeeking = false; });
+
+    /* ========== VOLUME ========== */
+    audio.volume = parseFloat(volumeSlider.value);
+    volumeSlider.addEventListener('input', () => {
+      audio.volume = parseFloat(volumeSlider.value);
+    });
+
+    volumeBtn.addEventListener('click', () => {
+      if (audio.volume > 0) {
+        volumeSlider.dataset.prev = audio.volume;
+        audio.volume = 0;
+        volumeSlider.value = 0;
+      } else {
+        audio.volume = parseFloat(volumeSlider.dataset.prev || 0.8);
+        volumeSlider.value = audio.volume;
+      }
+    });
+
+    /* ========== CONTROLS ========== */
+    playBtn.addEventListener('click', togglePlay);
+    nextBtn.addEventListener('click', playNext);
+    prevBtn.addEventListener('click', playPrev);
+
+    /* ========== SEARCH ========== */
+    let searchTimeout;
+    searchInput.addEventListener('input', () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(filterAndRender, 200);
+    });
+
+    /* ========== KEYBOARD ========== */
+    document.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
+      if (e.code === 'ArrowRight') { e.preventDefault(); if (audio.duration) audio.currentTime = Math.min(audio.duration, audio.currentTime + 10); }
+      if (e.code === 'ArrowLeft') { e.preventDefault(); audio.currentTime = Math.max(0, audio.currentTime - 10); }
+      if (e.code === 'ArrowUp') { e.preventDefault(); audio.volume = Math.min(1, audio.volume + 0.05); volumeSlider.value = audio.volume; }
+      if (e.code === 'ArrowDown') { e.preventDefault(); audio.volume = Math.max(0, audio.volume - 0.05); volumeSlider.value = audio.volume; }
+    });
+
+    /* ========== INIT ========== */
+    renderYearTabs();
+    filterAndRender();
+  </script>
+</body>
+</html>
